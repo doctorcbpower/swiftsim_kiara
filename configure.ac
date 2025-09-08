@@ -1524,18 +1524,18 @@ if test "x$with_grackle" != "xno"; then
    AC_PROG_FC
    AC_FC_LIBRARY_LDFLAGS
    if test "x$with_grackle" != "xyes" -a "x$with_grackle" != "x"; then
-      GRACKLE_LIBS="-L$with_grackle/lib -lgrackle -Wl,-rpath=$with_grackle/lib"
+      GRACKLE_LIBS="-L$with_grackle/lib -lgrackle" # -Wl,-rpath=$with_grackle/lib -lgrackle"
       GRACKLE_INCS="-I$with_grackle/include -DOMIT_LEGACY_INTERNAL_GRACKLE_FUNC"
    else
       GRACKLE_LIBS="-lgrackle"
       GRACKLE_INCS=""
    fi
-   # AC_MSG_NOTICE([Grackle include is $GRACKLE_INCS and grackle lib is $GRACKLE_LIBS])
+   AC_MSG_NOTICE([Grackle include is $GRACKLE_INCS and grackle lib is $GRACKLE_LIBS])
    # note that if you have multiple grackle libs included in your LD_LIBRARY_PATH, the code will use the first one it finds, not this specific one defined here!
 
    have_grackle="yes"
 
-   # AS_VAR_APPEND([GRACKLE_LIBS], ["$FCLIBS"])
+   AS_VAR_APPEND([GRACKLE_LIBS], ["$FCLIBS"])
 
    AC_CHECK_LIB(
       [grackle],

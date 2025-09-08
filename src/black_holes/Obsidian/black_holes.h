@@ -445,6 +445,11 @@ __attribute__((always_inline)) INLINE static void black_holes_first_init_bpart(
   bp->adaf_energy_to_dump = 0.f;
   bp->adaf_energy_used_this_step = 0.f;
 
+  /* CBP - allow for jet direction to follow angular momentum direction*/
+  bp->jet_direction[0] = bp->angular_momentum_direction[0];
+  bp->jet_direction[1] = bp->angular_momentum_direction[1];
+  bp->jet_direction[2] = bp->angular_momentum_direction[2];
+  /* End of CBP update */
 }
 
 /**
@@ -638,6 +643,7 @@ __attribute__((always_inline)) INLINE static void black_holes_end_density(
   bp->velocity_gas[0] *= m_tot_inv;
   bp->velocity_gas[1] *= m_tot_inv;
   bp->velocity_gas[2] *= m_tot_inv;
+
   bp->circular_velocity_gas[0] *= m_tot_inv;
   bp->circular_velocity_gas[1] *= m_tot_inv;
   bp->circular_velocity_gas[2] *= m_tot_inv;
@@ -853,11 +859,6 @@ __attribute__((always_inline)) INLINE static void black_holes_swallow_bpart(
       bpi->last_minor_merger_time = time;
     }
   }
-
-  /* Increase the masses of the BH. */
-  bpi->mass += bpj->mass;
-  bpi->gpart->mass += bpj->mass;
-  bpi->subgrid_mass += bpj->subgrid_mass;
 
   /* Collect the swallowed angular momentum */
   bpi->swallowed_angular_momentum[0] += bpj->swallowed_angular_momentum[0];
@@ -1814,6 +1815,30 @@ INLINE static void black_holes_create_from_gas(
 
   /* Initial seed mass */
   bp->subgrid_mass = props->subgrid_seed_mass;
+
+  /* CBP - assume that black hole has small initial spin */
+  bp->spin = props->subgrid_seed_spin;
+
+  /* Generate a random unit vector for the spin direction */
+  const float rand_cos_theta =
+      2. *
+      (0.5 - random_unit_interval(bp->id, ti_current, random_number_BH_spin));
+  const float rand_sin_theta =
+      sqrtf(max(0., (1. - rand_cos_theta) * (1. + rand_cos_theta)));
+  const float rand_phi =
+      2. * M_PI *
+      random_unit_interval(bp->id * bp->id, ti_current, random_number_BH_spin);
+
+  bp->angular_momentum_direction[0] = rand_sin_theta * cos(rand_phi);
+  bp->angular_momentum_direction[1] = rand_sin_theta * sin(rand_phi);
+  bp->angular_momentum_direction[2] = rand_cos_theta;
+
+  /* Point the jets in the same direction to begin with */
+  bp->jet_direction[0] = bp->angular_momentum_direction[0];
+  bp->jet_direction[1] = bp->angular_momentum_direction[1];
+  bp->jet_direction[2] = bp->angular_momentum_direction[2];
+
+  /* End of CBP update */
 
   /* We haven't accreted anything yet */
   bp->total_accreted_mass = 0.f;

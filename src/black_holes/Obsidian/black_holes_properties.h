@@ -155,6 +155,9 @@ struct black_holes_props {
   /*! Method to compute the dynamical time within the kernel */
   int dynamical_time_calculation_method;
 
+  /*! CBP - BH spin magnitude to assign at seeding */
+  float subgrid_seed_spin;
+
   /* ---- Properties of the feedback model ------- */
 
   /*! The loading for the jet: momentum or energy */
@@ -473,6 +476,15 @@ INLINE static void black_holes_props_init(struct black_holes_props *bp,
       
   /* Convert to internal units */
   bp->subgrid_seed_mass *= phys_const->const_solar_mass;
+
+  /* Get subgrid_seed_spin to initlialise BH spin on creation from a gas element */
+  bp->subgrid_seed_spin = parser_get_param_float(params, "ObsidianAGN:subgrid_seed_spin");
+  if ((bp->subgrid_seed_spin <= 0.) || (bp->subgrid_seed_spin > 1.)) {
+    error(
+        "The BH seed spin parameter must be strictly between 0 and 1, "
+        "not %f",
+        bp->subgrid_seed_spin);
+  }
 
   bp->use_subgrid_mass_from_ics = parser_get_opt_param_int(params, 
                                   "ObsidianAGN:use_subgrid_mass_from_ics", 1);

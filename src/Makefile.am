@@ -540,6 +540,7 @@ nobase_noinst_HEADERS += black_holes/Obsidian/black_holes.h black_holes/Obsidian
 nobase_noinst_HEADERS += black_holes/Obsidian/black_holes_part.h black_holes/Obsidian/black_holes_iact.h 
 nobase_noinst_HEADERS += black_holes/Obsidian/black_holes_properties.h black_holes/Obsidian/black_holes_parameters.h 
 nobase_noinst_HEADERS += black_holes/Obsidian/black_holes_struct.h black_holes/Obsidian/black_holes_debug.h
+nobase_noinst_HEADERS += black_holes/Obsidian/black_holes_spin.h
 nobase_noinst_HEADERS += black_holes/SPIN_JET/black_holes.h black_holes/SPIN_JET/black_holes_io.h
 nobase_noinst_HEADERS += black_holes/SPIN_JET/black_holes_part.h black_holes/SPIN_JET/black_holes_iact.h
 nobase_noinst_HEADERS += black_holes/SPIN_JET/black_holes_properties.h black_holes/SPIN_JET/black_holes_parameters.h

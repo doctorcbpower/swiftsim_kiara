@@ -223,6 +223,15 @@ struct bpart {
   /*! Total (physical) angular momentum accumulated from subgrid accretion */
   float accreted_angular_momentum[3];
 
+  /*! CBP - BH dimensionless spin */
+  float spin;
+
+  /*! CBP - normalized spin/angular momentum vector of the BH */
+  float angular_momentum_direction[3];
+
+  /*! CBP - current jet direction. */
+  float jet_direction[3];
+
   /*! Eddington fractions */
   float eddington_fraction;
 
